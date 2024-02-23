@@ -17,6 +17,13 @@ const markerProps = [
     title: "Разворот вне перекрестка",
     subtitle: "Возле магазина «пятерочка»"
   },
+  {
+    type: "out",
+    coordinates: [34.417736295862184, 53.20948032911085],
+    imageSrc: "./images/3.png",
+    title: "Разворот вне перекрестка",
+    subtitle: "На КБ (в направлении к Московскому проспекту)"
+  },
 ];
 
 const MAP_CONFIG = [
