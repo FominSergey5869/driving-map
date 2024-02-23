@@ -110,7 +110,7 @@ body {
   margin-bottom: 8px;
   overflow: hidden;
   object-fit: contain;
-  filter: contrast(0.7);
+  filter: contrast(0.9);
 }
 
 #popup_subtitle {
