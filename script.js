@@ -1,25 +1,18 @@
+/**
+ * types: "cross" || "out" || "info"
+ */
+
 const markerProps = [
   {
-    coordinates: [34.42350221978595, 53.20966191052484],
-    iconSrc:
-      "https://yastatic.net/s3/front-maps-static/maps-front-jsapi-3/examples/images/marker-custom-icon/yellow-capybara.png",
-    message: "I'm yellow capybara!",
-  },
-  {
-    coordinates: [34.52350221978595, 53.30966191052484],
-    iconSrc:
-      "https://yastatic.net/s3/front-maps-static/maps-front-jsapi-3/examples/images/marker-custom-icon/purple-capybara.png",
-    message: "I'm purple capybara!",
-  },
-  {
-    coordinates: [34.62350221978595, 53.40966191052484],
-    iconSrc:
-      "https://yastatic.net/s3/front-maps-static/maps-front-jsapi-3/examples/images/marker-custom-icon/green-capybara.png",
-    message: "I'm green capybara!",
+    type: "cross",
+    coordinates: [34.419220034364585, 53.2123003375276],
+    imageSrc: "./images/1.png",
+    title: "Разворот на перекрестке",
+    subtitle: "В любом направлении"
   },
 ];
 
-const PASTE_JSON_HERE = [
+const MAP_CONFIG = [
   {
     tags: {
       any: ["outdoor", "park", "cemetery", "medical"],
@@ -91,6 +84,11 @@ const PASTE_JSON_HERE = [
   },
 ];
 
+const setCrossPopUpStyles = () => {
+  const popUp = document.getElementById("popup");
+  popUp.style.background = "#DDFFCE";
+}
+
 async function initMap() {
   await ymaps3.ready;
 
@@ -117,14 +115,14 @@ async function initMap() {
 
   map.addChild(
     new YMapDefaultSchemeLayer({
-      customization: PASTE_JSON_HERE,
+      customization: MAP_CONFIG,
     })
   );
 
   map.addChild(new YMapDefaultFeaturesLayer({}));
 
   const onClickListenerHandler = (object, event) => {
-    console.log(event.coordinates);
+    console.log(event?.coordinates);
     const popUp = document.getElementById("popup");
     popUp.style.bottom = "-100%";
   };
@@ -133,20 +131,40 @@ async function initMap() {
     onClick: onClickListenerHandler,
   });
 
+  document.getElementById("popup_header_closer_container").addEventListener("click", onClickListenerHandler)
+
   map.addChild(listener);
 
   markerProps.forEach((markerProp) => {
     const markerElement = document.createElement("img");
     markerElement.className = "icon-marker";
-    markerElement.src = markerProp.iconSrc;
+
+    switch (markerProp.type) {
+      case 'cross': markerElement.src = './icons/cross.svg'; break;
+      case 'out': markerElement.src = './icons/out.svg'; break;
+      default: markerElement.src = './icons/info.svg'; break;
+    }
+
+
     markerElement.onclick = (e) => {
       e.stopPropagation();
+
       const popUp = document.getElementById("popup");
-      popUp.style.bottom = "30px";
+      // switch (markerProp.type) {
+      //   case 'cross': popUp.style.background = "#DDFFCE"; break;
+      //   case 'out': popUp.style.background = "#FFFACE"; break;
+      //   default: popUp.style.background = "#E6E7FF"; break;
+      // }
+
+      popUp.style.bottom = "0";
       const img = document.getElementById("popup_image");
-      img.setAttribute("src", markerProp.iconSrc);
-      const text = document.getElementById("popup_text");
-      text.innerText = markerProp.message;
+      img.setAttribute("src", markerProp.imageSrc);
+
+      const text = document.getElementById("popup_header_text");
+      text.innerText = markerProp.title;
+
+      const subtitle = document.getElementById("popup_subtitle");
+      subtitle.innerText = markerProp.subtitle;
     };
     map.addChild(
       new YMapMarker({ coordinates: markerProp.coordinates }, markerElement)
