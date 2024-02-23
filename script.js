@@ -10,6 +10,13 @@ const markerProps = [
     title: "Разворот на перекрестке",
     subtitle: "В любом направлении"
   },
+  {
+    type: "out",
+    coordinates: [34.42245640765331, 53.21135980166419],
+    imageSrc: "./images/2.png",
+    title: "Разворот вне перекрестка",
+    subtitle: "Возле магазина «пятерочка»"
+  },
 ];
 
 const MAP_CONFIG = [
@@ -83,11 +90,6 @@ const MAP_CONFIG = [
     },
   },
 ];
-
-const setCrossPopUpStyles = () => {
-  const popUp = document.getElementById("popup");
-  popUp.style.background = "#DDFFCE";
-}
 
 async function initMap() {
   await ymaps3.ready;
